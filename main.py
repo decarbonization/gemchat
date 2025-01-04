@@ -8,7 +8,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+gemini_api_key = os.getenv("GEMINI_API_KEY")
+if not gemini_api_key or gemini_api_key == '':
+    raise KeyError('GEMINI_API_KEY missing in env')
+genai.configure(api_key=gemini_api_key)
 
 async def shell(reader: telnetlib3.TelnetReaderUnicode, writer: telnetlib3.TelnetWriterUnicode):
     print(f"CONNECT {reader} and {writer}")
