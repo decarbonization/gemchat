@@ -1,4 +1,5 @@
 import asyncio
+import google.generativeai as genai
 import os
 import socket
 import telnetlib3
@@ -7,15 +8,23 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-async def shell(reader: telnetlib3.TelnetReader, writer: telnetlib3.TelnetWriter):
-    writer.write('\r\nWould you like to play a game? ')
-    inp = await reader.read(1)
-    if inp:
-        writer.echo(inp)
-        writer.write('\r\nThey say the only way to win '
-                     'is to not play at all.\r\n')
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+async def shell(reader: telnetlib3.TelnetReaderUnicode, writer: telnetlib3.TelnetWriterUnicode):
+    print(f"CONNECT {reader} and {writer}")
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    chat = model.start_chat()
+    writer.write('\r\nWelcome to gemchat, type bye followed by return to hang up\r\n')
+    while True:
+        writer.write('\r\ngemini> ')
+        line = await reader.readline()
+        if line.strip() == 'bye':
+            break
+        response = await chat.send_message_async(line)
+        writer.write(f'\r\n{response.text}\r\n')
         await writer.drain()
     writer.close()
+    print(f"HANG UP {reader} and {writer}")
 
 if __name__ == '__main__':
     port = int(os.getenv("PORT", "6023"))
