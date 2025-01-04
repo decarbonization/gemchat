@@ -1,6 +1,6 @@
 # gemchat
 
-A simple telnet server for chatting with Gemini.
+Toy for chatting with Gemini model over telnet.
 
 # Installation
 
@@ -18,6 +18,7 @@ $ pipenv install
 
 # Environment Variables
 
+- `GEMINI_API_KEY`: Key for communicating with Gemini API. [More info](https://ai.google.dev/gemini-api/docs/api-key).
 - `PORT`: The port to bind the telnet server to. Defaults to `6023`.
 
 # Usage
