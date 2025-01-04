@@ -3,6 +3,10 @@ import os
 import socket
 import telnetlib3
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 async def shell(reader: telnetlib3.TelnetReader, writer: telnetlib3.TelnetWriter):
     writer.write('\r\nWould you like to play a game? ')
     inp = await reader.read(1)
